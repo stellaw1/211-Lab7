@@ -38,14 +38,14 @@ module shifter_tb();
         error_checker(16'b1110000110011110);
         $display("sim_sout is %b, expecting %b", sim_sout, 16'b1110000110011110);
 
-        //testcase 2: shift = 10
+        //testcase 3: shift = 10
         sim_shift = 2'b10;
         #5;
 
         error_checker(16'b0111100001100111);
         $display("sim_sout is %b, expecting %b", sim_sout, 16'b0111100001100111);
         
-        //testcase 2: shift = 11
+        //testcase 4: shift = 11
         sim_shift = 2'b11;
         #5;
 

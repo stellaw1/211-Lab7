@@ -36,6 +36,8 @@ module regfile_tb();
         //set sim_clk to its rising edge
         sim_clk = 1;
         #5;
+        sim_clk = 0;
+        #5;
 
         $display("data_0 is %b, expecting %b", DUT.data_0, 16'b1);
 
@@ -45,6 +47,19 @@ module regfile_tb();
 
         error_checker(16'b1);
         $display("data_out is %b, expecting %b", sim_data_out, 16'b1);
+
+        // //testcase 3: test writing to register 0, data_in = 16'b1
+        // sim_data_in = 16'b0000000000000010;
+        // sim_writenum = 3'b1;
+        // sim_write = 1'b1;
+        // #5;
+
+        // sim_clk = 1;
+        // #5;
+        // sim_clk = 0;
+        // #5;
+
+        // $display("data_1 is %b, expecting %b", DUT.data_1, 16'b0000000000000010);
 
         
         //print results, whether errors were found

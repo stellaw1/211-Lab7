@@ -77,7 +77,7 @@ module enableRead(readnum, data_out, data_0, data_1, data_2, data_3, data_4, dat
     input [2:0] readnum;
     input [15:0] data_0, data_1, data_2, data_3, data_4, data_5, data_6, data_7;
     output [15:0] data_out;
-    reg [15:0] data_out; //DEBUG: might need to rename
+    reg [15:0] data_out; 
 
     //decode readnum from binary to 8-bit one hot
     wire [7:0] readOneHot;
