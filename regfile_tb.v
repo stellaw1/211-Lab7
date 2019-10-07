@@ -20,22 +20,6 @@ module regfile_tb();
         end
     endtask
 
-    //DEBUG: Do I need a forever loop? Can I just manually change clk for every write testcase
-    // //loop of rising edges in clk
-    // initial begin
-    //     //default clk to be 0
-    //     clk = 1'b0; 
-    //     #5;
-
-    //     //loop clk to have a rising edge every 10 time units
-    //     forever begin
-    //         clk = 1'b1; 
-    //         #5;
-    //         clk = 1'b0; 
-    //         #5;
-    //     end
-    // end
-
     //testcases go here
     initial begin
         //initialize signals
@@ -49,6 +33,7 @@ module regfile_tb();
         sim_write = 1'b1;
         #5;
 
+        //set sim_clk to its rising edge
         sim_clk = 1;
         #5;
 
