@@ -8,7 +8,7 @@ module datapath_tb();
   reg err;
 
   //outputs
-  wire [15:0] sim_data_out;
+  wire [15:0] sim_datapath_out;
   wire Z_out;
 
   datapath DUT(.datapath_in(sim_data_in),
@@ -58,7 +58,7 @@ module datapath_tb();
     #10;
 
     if (sim_datapath_out != 16'd40503) begin
-      $display("datapath_out error 1. output: %d, expected: %d",datapath_out, 16'd40503);
+      $display("datapath_out error 1. output: %d, expected: %d",sim_datapath_out, 16'd40503);
       assign err = 1'b1;
     end
     if (Z_out != 1'b1) begin
@@ -78,7 +78,7 @@ assign write = 1'b0; #5;
     #5;
 
     if (sim_datapath_out != 16'd40503) begin
-      $display("datapath_out error 2. output: %d, expected: %d",datapath_out, 16'd40503);
+      $display("datapath_out error 2. output: %d, expected: %d", sim_datapath_out, 16'd40503);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -94,7 +94,7 @@ assign write = 1'b0; #5;
     #5;
 
     if (sim_datapath_out != 16'd58481) begin
-      $display("datapath_out error 3. output: %d, expected: %d",datapath_out, 16'd58481);
+      $display("datapath_out error 3. output: %d, expected: %d", sim_datapath_out, 16'd58481);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -114,7 +114,7 @@ assign write = 1'b0; #5;
     assign loadc = 1'b1;
     #5;
     if (sim_datapath_out != 16'd4632) begin
-      $display("datapath_out error 4. output: %d, expected: %d",datapath_out, 16'd4632);
+      $display("datapath_out error 4. output: %d, expected: %d",sim_datapath_out, 16'd4632);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -131,7 +131,7 @@ assign write = 1'b0; #5;
     assign shift = 2'b01;
     #5;
     if (sim_datapath_out != 16'd9264) begin
-      $display("datapath_out error 5. output: %d, expected: %d",datapath_out, 16'd9264);
+      $display("datapath_out error 5. output: %d, expected: %d", sim_datapath_out, 16'd9264);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -152,7 +152,7 @@ assign write = 1'b0; #5;
     assign asel = 1'b0;
     #5;
     if (sim_datapath_out != 16'd15100) begin
-      $display("datapath_out error 6. output: %d, expected: %d",datapath_out, 16'd15100);
+      $display("datapath_out error 6. output: %d, expected: %d", sim_datapath_out, 16'd15100);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -171,7 +171,7 @@ assign write = 1'b0; #5;
     #5;
 
     if (sim_datapath_out != 16'd15100) begin
-      $display("datapath_out error 7. output: %d, expected: %d",datapath_out, 16'd15100);
+      $display("datapath_out error 7. output: %d, expected: %d", sim_datapath_out, 16'd15100);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -188,7 +188,7 @@ assign write = 1'b0; #5;
     assign readnum = 3'b010;
     #5;
     if (sim_datapath_out != 16'd43381) begin
-      $display("datapath_out error 8. output: %d, expected: %d",datapath_out, 16'd43381);
+      $display("datapath_out error 8. output: %d, expected: %d", sim_datapath_out, 16'd43381);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -205,7 +205,7 @@ assign write = 1'b0; #5;
     assign loadc = 1'b1;
     #5;
     if (sim_datapath_out != 16'b000_000_000_000_010_0) begin
-      $display("datapath_out error 9. output: %d, expected: %d",datapath_out, 16'b000_000_000_000_010_0);
+      $display("datapath_out error 9. output: %d, expected: %d", sim_datapath_out, 16'b000_000_000_000_010_0);
       assign err = 1'b1;
     end
     if (Z_out != 1'b0) begin
@@ -224,7 +224,7 @@ assign write = 1'b0; #5;
     assign write = 1'b1;
     #5;
     if (sim_datapath_out != 16'b0) begin
-      $display("datapath_out error 10. output: %d, expected: %d",datapath_out, 16'b0);
+      $display("datapath_out error 10. output: %d, expected: %d", sim_datapath_out, 16'b0);
       assign err = 1'b1;
     end
     if (Z_out != 1'b1) begin
@@ -234,5 +234,7 @@ assign write = 1'b0; #5;
     #5;
     if (err == 0)
        $display("yet again yeeted");
+  
+    $stop;
   end
 endmodule
