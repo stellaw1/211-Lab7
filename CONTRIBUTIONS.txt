@@ -1,0 +1,21 @@
+CPEN 211 L1E
+Baknel Macz & Stella Wang
+
+
+Abstract: 
+We started working on Lab5 on October 6th at MCLD room 348 computer lab. We started working at 2:00 PM and called it a day at 7:00PM. Then, we met up again on Monday October 7th at LIFE to continue working on it, but we couldn't figure out the bug so we met up again on Tuesday October 8th at 9:00 AM in the same MCLD lab to finish up everything. 
+
+Development Sequence:
+- Stella created a private GitHub repo for writing code
+- Stella wrote all of regfile.v and regfile_tb.v. Stella debugged both these files and checked everything on ModelSim was working on ModelSim. 
+- Baknel wrote all of alu.v and alu_tb.v. Baknel debugged both these files and checked everything on ModelSim was working on ModelSim. 
+- Stella wrote all of shifter.v and shifter_tb.v. Baknel debugged both of these files and checked everything was working on ModelSim. 
+- Stella checked that all three of regfile, ALU, and shifter were compatible with autograder check1
+- Baknel checked that all three of regfile, ALU, and shifter were compatible with autograder check2, and Stella debugged for like a couple hours because regfile wasn't passing the test
+- Stella wrote all of datapath.v
+- Baknel wrote all of datapath_tb.v and checked that everything passed in ModelSim. 
+- Stella checked that datapath was compatible with autograder check3, and Baknel debugged for like a lot of hours after because there was a bug which ended up being one of the inputs and outputs in a module instantiation in datapath being switched. 
+- Baknel wrote all the code for seg in lab5_top.v, while Stella compiled everything on Quartus, which sadly made her computer freeze a couple times but it worked in the end!
+- Baknel finalized everything by gathering all the correct files in the same project on ModelSim, and saved the correct wave forms. 
+- Baknel compiled the finalized code on Quartus and loaded it on the De1-SoC board for testing. 
+- Baknel wrote a list of operations to test using the De1-SoC and Stella used the De1-
