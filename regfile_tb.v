@@ -22,9 +22,12 @@ module regfile_tb();
     endtask
     
     //loop of rising edges every 10 time units
-    initial forever begin
+    initial begin
         sim_clk = 0; #5;
-        sim_clk = 1; #5;
+        forever begin
+            sim_clk = 1; #5;
+            sim_clk = 0; #5;
+        end
     end
 
     initial begin

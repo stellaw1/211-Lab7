@@ -7,17 +7,17 @@ module datapath(datapath_in, vsel, writenum, write, readnum, clk, loada, loadb, 
     output [15:0] datapath_out;
 
     //declare signals
-    wire[15:0] data_in, fromAtoMux6, fromBtoShifter, sout, Ain, Bin, out;
+    wire[15:0] data_in, data_out, fromAtoMux6, fromBtoShifter, sout, Ain, Bin, out;
 
     //instantiate block 9: first MUX
     Mux2 #(16) mux1(datapath_in, datapath_out, vsel, data_in);
 
     //instantiate block 1: register file
-    regfile regfile1(data_in, writenum, write, readnum, clk, data_out);
+    regfile REGFILE(data_in, writenum, write, readnum, clk, data_out);
 
     //instantiat blocks 3 and 4: pipeline register A and B
-    vDFFE pipeA(clk, loada, data_out, fromAtoMux6); //DEBUG
-    vDFFE pipeB(clk, loadb, data_out, fromBtoShifter); //DEBUG
+    vDFFE #(16) pipeA(clk, loada, data_out, fromAtoMux6); //DEBUG
+    vDFFE #(16) pipeB(clk, loadb, data_out, fromBtoShifter); //DEBUG
 
     //instantiate block 8: shifter unit
     shifter shifter8(fromBtoShifter, shift, sout);
