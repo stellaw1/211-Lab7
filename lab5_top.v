@@ -164,9 +164,11 @@ endmodule
 // code will not work with the DE1-SoC because the order of segments used in
 // the book is not the same as on the DE1-SoC (see comments below).
 
-module sseg(in,segs);
+module sseg(in, segs);
   input [3:0] in;
   output [6:0] segs;
+
+  reg [6:0] segs;
 
   // NOTE: The code for sseg below is not complete: You can use your code from
   // Lab4 to fill this in or code from someone else's Lab4.  
@@ -213,38 +215,27 @@ module sseg(in,segs);
   //            14 | E
   //            15 | F
 
-  if (in == 3'h 0)
-    assign segs = 7'b1000000;//display 0
-  if (in == 3'h 0)
-    assign segs = 7'b1111001;//display 1
-  if (in == 3'h 0)
-    assign segs = 7'b0100100;//display 2
-  if (in == 3'h 0)
-    assign segs = 7'b0110000; //display 3
-  if (in == 3'h 0)
-    assign segs = 7'b0011100;//display 4
-  if (in == 3'h 0)
-    assign segs = 7'b0010010;//display 5
-  if (in == 3'h 0)
-    assign segs = 7'b0000010;//display 6
-  if (in == 3'h 0)
-    assign segs = 7'b1111000;//display 7
-  if (in == 3'h 0)
-    assign segs = 7'b0000000; //display 8
-  if (in == 3'h 0)
-    assign segs = 7'b0011000;//display 9
-  if (in == 3'h 0)
-    assign segs = 7'b0001000;//display A
-  if (in == 3'h 0)
-    assign segs = 7'b0000011;//display b
-  if (in == 3'h 0
-    assign segs = 7'b1000110;//display C
-  if (in == 3'h 0)
-    assign segs = 7'b0100001; //display d
-  if (in == 3'h 0)
-      assign segs = 7'b0000110; //display E
-  if (in == 3'h 0)
-      assign segs = 7'b0001110; //display F
-  default:
-    assign segs = 7'b0111111;
+  
+  always @(*) begin
+    case (in)
+      4'h0: segs = 7'b1000000;//display 0
+      4'h1: segs = 7'b1111001;//display 1
+      4'h2: segs = 7'b0100100;//display 2
+      4'h3: segs = 7'b0110000; //display 3
+      4'h4: segs = 7'b0011100;//display 4
+      4'h5: segs = 7'b0010010;//display 5
+      4'h6: segs = 7'b0000010;//display 6
+      4'h7: segs = 7'b1111000;//display 7
+      4'h8: segs = 7'b0000000; //display 8
+      4'h9: segs = 7'b0011000;//display 9
+      4'hA: segs = 7'b0001000;//display A
+      4'hB: segs = 7'b0000011;//display b
+      4'hC: segs = 7'b1000110;//display C
+      4'hD: segs = 7'b0100001; //display d
+      4'hE: segs = 7'b0000110; //display E
+      4'hF: segs = 7'b0001110; //display F
+      default:  segs = 7'b0111111;
+    endcase
+  end
+  
 endmodule
