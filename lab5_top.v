@@ -213,6 +213,38 @@ module sseg(in,segs);
   //            14 | E
   //            15 | F
 
-  assign segs = 7'b0001110;  // this will output "F" 
-
+  if (in == 3'h 0)
+    assign segs = 7'b1000000;//display 0
+  if (in == 3'h 0)
+    assign segs = 7'b1111001;//display 1
+  if (in == 3'h 0)
+    assign segs = 7'b0100100;//display 2
+  if (in == 3'h 0)
+    assign segs = 7'b0110000; //display 3
+  if (in == 3'h 0)
+    assign segs = 7'b0011100;//display 4
+  if (in == 3'h 0)
+    assign segs = 7'b0010010;//display 5
+  if (in == 3'h 0)
+    assign segs = 7'b0000010;//display 6
+  if (in == 3'h 0)
+    assign segs = 7'b1111000;//display 7
+  if (in == 3'h 0)
+    assign segs = 7'b0000000; //display 8
+  if (in == 3'h 0)
+    assign segs = 7'b0011000;//display 9
+  if (in == 3'h 0)
+    assign segs = 7'b0001000;//display A
+  if (in == 3'h 0)
+    assign segs = 7'b0000011;//display b
+  if (in == 3'h 0
+    assign segs = 7'b1000110;//display C
+  if (in == 3'h 0)
+    assign segs = 7'b0100001; //display d
+  if (in == 3'h 0)
+      assign segs = 7'b0000110; //display E
+  if (in == 3'h 0)
+      assign segs = 7'b0001110; //display F
+  default:
+    assign segs = 7'b0111111;
 endmodule
