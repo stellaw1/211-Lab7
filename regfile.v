@@ -84,7 +84,7 @@ module enableRead(readnum, data_out, data_0, data_1, data_2, data_3, data_4, dat
     Dec #(3, 8) readNum(readnum, readOneHot);
 
     //everytime readnum changes, reassign data_out to be data stored in corresponding register
-    always @(readOneHot) begin
+    always @(readnum) begin //DEBUG sensitivity list
         case (readOneHot)
             8'b00000001: data_out = data_0;
             8'b00000010: data_out = data_1;

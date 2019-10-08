@@ -16,37 +16,59 @@ module regfile_tb();
             if (DUT.data_out !== expected_data_out) begin
                 $display("ERROR: data_out is %b, expecting %b", DUT.data_out, expected_data_out);
                 err = 1'b1;
+                $stop;
             end
         end
     endtask
+    
+    //loop of rising edges every 10 time units
+    initial forever begin
+        sim_clk = 0; #5;
+        sim_clk = 1; #5;
+    end
 
-    //testcases go here
     initial begin
-        //initialize signals
-        sim_clk = 1'b0;
-        err = 1'b0;
-        sim_data_in = 16'b1;
-        #5;
+        err = 0;
+        sim_write = 1;
+        sim_data_in = 16'h42;
+        sim_writenum = 0;
+        sim_readnum = 0;
 
-        //testcase 1: test writing to register 0, data_in = 16'b1
-        sim_writenum = 3'b0;
-        sim_write = 1'b1;
-        #5;
+        #10;
 
-        //set sim_clk to its rising edge
-        sim_clk = 1;
-        #5;
-        sim_clk = 0;
-        #5;
+        //testcase autograder
+        error_checker(16'h42);
+        $display("data_out is %b, expecting %b", sim_data_out, 16'h42);
 
-        $display("data_0 is %b, expecting %b", DUT.data_0, 16'b1);
+        // //initialize signals
+        // sim_clk = 1'b0;
+        // err = 1'b0;
+        // sim_data_in = 16'b1;
+        // #5;
 
-        //testcase 2: read from register 0
-        sim_readnum = 3'b0;
-        #5;
+        // //testcase 1: test writing and reading with register 0, data_in = 16'b1
+        // sim_writenum = 3'b0;
+        // sim_write = 1'b1;
+        // sim_readnum = 3'b0;
+        // #10;
 
-        error_checker(16'b1);
-        $display("data_out is %b, expecting %b", sim_data_out, 16'b1);
+        // error_checker(16'b1);
+        // $display("data_out is %b, expecting %b", sim_data_out, 16'b1);
+
+        // //testcase 3: 
+        // sim_write = 1;
+        // sim_data_in = 16'h42;
+        // sim_writenum = 0;
+        // sim_readnum = 0;
+        // #5;
+
+        // sim_clk = 1;
+        // #5;
+        // sim_clk = 0;
+        // #5;
+
+        // $display("data_0 is %b, expecting %b", DUT.data_0, 16'b1000010);
+        // $display("data_out is %b, expecting %b", sim_data_out, 16'b1000010);
 
         // //testcase 3: test writing to register 0, data_in = 16'b1
         // sim_data_in = 16'b0000000000000010;
@@ -67,8 +89,6 @@ module regfile_tb();
             $display ("All test cases passed with no errors. ");
         else
             $display ("Error found. ");
-
-        //stop forever loop of clk rising edges
         $stop;
     end
 
