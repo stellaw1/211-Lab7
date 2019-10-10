@@ -142,6 +142,30 @@ module sseg(in,segs);
   //            14 | E
   //            15 | F
 
-  assign segs = 7'b0001110;  // this will output "F" 
+  //assign segs = 7'b0001110;  // this will output "F" 
 
+
+  //always block taken from lab5_top
+  always @(*) begin
+    case (in)
+      4'h0: segs = 7'b1000000;//display 0
+      4'h1: segs = 7'b1111001;//display 1
+      4'h2: segs = 7'b0100100;//display 2
+      4'h3: segs = 7'b0110000; //display 3
+      4'h4: segs = 7'b0011001;//display 4
+      4'h5: segs = 7'b0010010;//display 5
+      4'h6: segs = 7'b0000010;//display 6
+      4'h7: segs = 7'b1111000;//display 7
+      4'h8: segs = 7'b0000000; //display 8
+      4'h9: segs = 7'b0011000;//display 9
+      4'hA: segs = 7'b0001000;//display A
+      4'hB: segs = 7'b0000011;//display b
+      4'hC: segs = 7'b1000110;//display C
+      4'hD: segs = 7'b0100001; //display d
+      4'hE: segs = 7'b0000110; //display E
+      4'hF: segs = 7'b0001110; //display F
+      default:  segs = 7'b0111111;
+    endcase
+  end
+  
 endmodule
