@@ -40,3 +40,53 @@ module Mux3(a2, a1, a0, s, b);
 		     ({k{s[1]}} & a1) |
 		     ({k{s[2]}} & a2);
 endmodule
+
+//define states for ADD
+`define sWait = 3'b0
+`define sGetA = 3'b001
+`define sGetB = 3'b010
+`define sAdd = 3'b011
+`define sWriteReg = 3'b100
+
+module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel, w);
+    input s, reset, clk;
+    input [2:0] opcode;
+    input [1:0] op;
+    output vsel, write, loada, loadb, loadc, loads, asel, bsel;
+    output [2:0] nsel;
+    output w; 
+
+    reg vsel, write, loada, loadb, loadc, loads, asel, bsel;
+    reg [2:0] nsel;
+    reg [2:0] present_state, next_state;
+    reg [15:0] out;
+
+    always @(posedge clk) begin
+        vsel = 1'b0;
+        write = 1'b0;
+        loada = 1'b0;
+        loadb = 1'b0;
+        loadc = 1'b0;
+        loads = 1'b0;
+        asel = 1'b0;
+        bsel = 1'b0;
+        if (reset) begin 
+            next_state = `sWait;
+        end else begin
+            case (present_state)
+                `sWait: if (s) next_state = `sGetA;
+                        else next_state = `sWait;
+                `sGetA: next_state = `sGetB;
+                `sGetB: next_state = `sAdd;
+                `sAdd: next_state = `sWriteReg;
+                `sWriteReg: next_state = `sWait;
+                default: next_state = 3'bxxx;
+            endcase
+            present_state = next_state;
+            out = 16'b0;
+            case (present_state)
+                `sGetA: 
+            endcase
+        end
+    end
+endmodule
