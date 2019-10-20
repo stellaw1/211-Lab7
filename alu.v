@@ -42,15 +42,15 @@ module Mux4(a3, a2, a1, a0, s, b);
 		     ({k{s[3]}} & a3) ;
 endmodule
 
-//k bit selecter MUX (used in data path)
-module Mux2(a1, a0, s, b);
-  parameter k = 1;
-  input [k-1:0] a1, a0; //inputs
-  input s; //select
-  output [k-1:0] b;
-  wire [k-1:0] b =   ({k{~s}} & a0) |
-		     ({k{s}} & a1) ;
-endmodule
+// //k bit selecter MUX (used in data path)
+// module Mux2(a1, a0, s, b);
+//   parameter k = 1;
+//   input [k-1:0] a1, a0; //inputs
+//   input s; //select
+//   output [k-1:0] b;
+//   wire [k-1:0] b =   ({k{~s}} & a0) |
+// 		     ({k{s}} & a1) ;
+// endmodule
 
 //Source: slide set 6
 // n:m decoder
