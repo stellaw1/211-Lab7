@@ -59,7 +59,6 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
     reg vsel, write, loada, loadb, loadc, loads, asel, bsel;
     reg [2:0] nsel;
     reg [2:0] present_state, next_state;
-    reg [15:0] out;
 
     always @(posedge clk) begin
         vsel = 1'b0;
@@ -83,9 +82,25 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
                 default: next_state = 3'bxxx;
             endcase
             present_state = next_state;
-            out = 16'b0;
             case (present_state)
-                `sGetA: 
+                `sGetA: begin 
+                            nsel = 3'b01;
+                            loada = 1'b1;
+                        end
+                `sGetB: begin
+                            nsel = 3'b010;
+                            loadb = 1'b1;
+                        end
+                `sAdd: begin
+                            asel = 0;
+                            bsel = 0;
+                            loadc = 1'b1;
+                        end
+                `sWriteReg: begin 
+                                nsel = 3'b100;
+                                vsel = 0;
+                                write = 1'b1;
+                            end
             endcase
         end
     end
