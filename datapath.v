@@ -1,17 +1,17 @@
-module datapath(mdata, vsel, writenum, write, readnum, clk, loada, loadb, loadc, loads, shift, asel, bsel, ALUop, Z_out, datapath_out);
+module datapath(mdata, vsel, writenum, write, readnum, clk, loada, loadb, loadc, loads, shift, asel, bsel, ALUop, N, Z, V, datapath_out);
     input [15:0] mdata; //16-bit output of a memory block (Lab7)
     input [15:0] sximm8; //sign extended 8-bit immediate driven from instruction decoder. sximm8 is a 16-bit sign extended version of the 8-bit value in the lower 8-bits of the instruction register
     input write, clk, loada, loadb, loadc, loads, asel, bsel;
     input [3:0] vsel;
     input [2:0] writenum, readnum;
     input [1:0] shift, ALUop;
-    output [2:0] Z_out;
+    output N, Z, V;
     output [15:0] datapath_out;
 
     //declare signals
     wire[15:0] sximm5, data_in, data_out, fromAtoMux6, fromBtoShifter, sout, Ain, Bin, out;
     wire[7:0] PC;
-    wire [2:0] Z;
+    wire zero, overflow, negative;
 
     //assign zero to mdata and PC
     assign mdata = 16'b0;
@@ -38,15 +38,15 @@ module datapath(mdata, vsel, writenum, write, readnum, clk, loada, loadb, loadc,
     // Mux2 #(16) mux7({11'b0, datapath_in[4:0]}, sout, bsel, Bin);
 
     //instantiate block 2: ALU unit
-    ALU alu2(Ain, Bin, ALUop, out, Z);
-
-    //Z[0] = zero flag, Z[1] = negative flag, Z[2] = overflow flag
-    assign Z[1] = out[15] ? 1'b1 : 1'b0;
-    assign Z[2] = ( Ain[15] & Bin[15] & ~out[15] ) || ( ~Ain[15] & ~Bin[15] & out[15]) ? 1'b1 : 1'b0;
+    ALU alu2(Ain, Bin, ALUop, out, zero);
 
     //instantiate block 5: pipeline register C
     vDFFE #(16) pipeC(clk, loadc, data_out, out);
 
+    //Z = zero flag, N = negative flag, V = overflow flag
+    assign negative = out[15] ? 1'b1 : 1'b0;
+    assign overflow = ( Ain[15] & Bin[15] & ~out[15] ) || ( ~Ain[15] & ~Bin[15] & out[15]) ? 1'b1 : 1'b0;
+
     //instantiate block 10: 3-bit status register
-    vDFFE #(3) status10(clk, loads, Z, Z_out);
+    vDFFE #(3) status10(clk, loads, {zero, overflow, negative}, {Z, V, N});
 endmodule
