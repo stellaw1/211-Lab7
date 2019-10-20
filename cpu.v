@@ -1,16 +1,71 @@
-//state machine that implements instructions in table 1
-module cpu(clk, reset, s, load, in, out, N, V, Z, w);
-    input clk, reset, s, load;
-    input [15:0] in;
-    output [15:0] out;
-    output N, V, Z, w;
+module cpu(clk,reset,s,load,in,out,N,V,Z,w);
+	input clk, reset, s ,load;
+	input [15:0] in;
+	output [15:0] out;
+	output N, V, Z, w;
 
+	wire [15:0] instr_regout;
+
+	vDFFE #(16) instr_reg(clk, load, in, instr_regout);
+	
+	wire opcode_FSM, op_FSM, 
+
+	instruction_Decoder decoder(	.from_instruction_reg (instr_regout), 
+					.nsel (nsel_FSM), 
+					.opcode (opcode_FSM),
+					 .op (op_FSM), 
+					.AlUop (ALUop_DE),
+					.sximm5 (sximm5_DE),
+					.sximm8(sximm8_DE),
+					shift(shift_DE),
+					.readnum(readnum_DE),
+					.writenum(writenum_DE) );
+
+	wire loada_FSM, loadb_FSM, loadc_FSM, write_FSM, loads_FSM, asel_FSM, bsel_FSM;
+	wire [3:0] vsel_FSM;
+
+	FSM FSM(	.s(s),
+			.reset(reset),
+			.clk(clk),
+			.opcode(opcode_FSM),
+			.op(op_FSM),
+			.nsel(nsel_FSM),
+			.loada(loada_FSM),
+			.loadb(loadb_FSM),
+			.loadc(loadc_FSM),
+			.loads(loads_FSM);
+			.vsel(vsel_FSM),
+			.write(write_FSM),
+			.asel(asel_FSM),
+			.bsel(bsel_FSM),
+			.w(w) );
+
+	datapath DP(	.mdata (16'b0),
+			.vsel (vsel_FSM),
+			.writenum (writenum_DE),
+			.write (write_FSM),
+			.readnum (readnum_DE),
+			.clk (clk),
+			.loada (loada_FSM),
+			.loadb (loadb_FSM),
+			.loadc (loadc_FSM),
+			.loads (loads_FSM),
+			.shift (shift_DE),
+			.asel (asel_FSM),
+			.bsel (bsel_FSM),
+			.ALUop (ALUop_DE),
+			.Z_out (Z),
+			.V (V),
+			.N (N),
+			.datapath_out(out) );
+
+	
 endmodule
 
 //instruction decoder module definition
 module instruction_Decoder(from_instruction_reg, nsel, opcode, op, ALUop, sximm5, sximm8, shift, readnum, writenum);
     input [15:0] from_instruction_reg; //rename from_instruction_reg input. 
-    input [TBD] nsel; //decide width of nsel from controller FSM
+    input [2:0] nsel; //decide width of nsel from controller FSM
     output [2:0] opcode, readnum, writenum;
     output [1:0] op, ALUop, shift;
     output [15:0] sximm5, sximm8;
@@ -41,13 +96,6 @@ module Mux3(a2, a1, a0, s, b);
 		     ({k{s[2]}} & a2);
 endmodule
 
-//define states for ADD
-`define sWait = 3'b0
-`define sGetA = 3'b001
-`define sGetB = 3'b010
-`define sAdd = 3'b011
-`define sWriteReg = 3'b100
-
 module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel, w);
     input s, reset, clk;
     input [2:0] opcode;
@@ -59,6 +107,7 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
     reg vsel, write, loada, loadb, loadc, loads, asel, bsel;
     reg [2:0] nsel;
     reg [2:0] present_state, next_state;
+    reg [15:0] out;
 
     always @(posedge clk) begin
         vsel = 1'b0;
@@ -82,26 +131,13 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
                 default: next_state = 3'bxxx;
             endcase
             present_state = next_state;
+            out = 16'b0;
             case (present_state)
-                `sGetA: begin 
-                            nsel = 3'b01;
-                            loada = 1'b1;
-                        end
-                `sGetB: begin
-                            nsel = 3'b010;
-                            loadb = 1'b1;
-                        end
-                `sAdd: begin
-                            asel = 0;
-                            bsel = 0;
-                            loadc = 1'b1;
-                        end
-                `sWriteReg: begin 
-                                nsel = 3'b100;
-                                vsel = 0;
-                                write = 1'b1;
-                            end
+                `sGetA: 
             endcase
         end
     end
+
+
+
 endmodule
