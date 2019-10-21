@@ -19,7 +19,7 @@ module cpu_tb();
 			.N (sim_N),
 			.V (sim_V),
 			.Z (sim_Z),
-			.w (sim_w);
+			.w (sim_w) );
 	
 	//clock signal
 	initial begin

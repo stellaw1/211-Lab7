@@ -144,7 +144,7 @@ module sseg(in,segs);
 
   //assign segs = 7'b0001110;  // this will output "F" 
 
-
+	reg [6:0] segs;
   //always block taken from lab5_top
   always @(*) begin
     case (in)
