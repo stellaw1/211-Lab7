@@ -1,5 +1,5 @@
 //cpu testbench
-module cpu_tb(clk, reset, s, load, in, out, N, V, Z, w);
+module cpu_tb();
     
 	reg clk, reset, s, load;
     
@@ -8,6 +8,7 @@ module cpu_tb(clk, reset, s, load, in, out, N, V, Z, w);
 	wire [15:0] sim_out;
    
 	wire sim_N, sim_V, sim_Z, sim_w;
+	reg err;
 
 	cpu DUT(	.clk (clk),
 			.reset (reset),
@@ -31,7 +32,47 @@ module cpu_tb(clk, reset, s, load, in, out, N, V, Z, w);
 
 
 	initial begin
-		//test ADD instruction
-		
+
+		//test MOV instruction
+		in = 16'b110_10_000_01100100; //REG[000] = 100
+		load = 1'b1;
+		reset = 1'b0;
+		s = 1'b0;
+		#10;
+		load = 1'b0;
+		#5;
+
+		if (sim_out != 16'd100) begin
+			$display("datapath error expected: %d, actual: %d", 16'd100,sim_out);
+			err = 1'b1;
+		end
+
+		//test MOV instruction with shift /2
+		in = 16'b110_00_000_001_10_000; //REG[001] = REG[000] / 2 = 50;
+		load = 1'b1;
+		reset = 1'b0;
+		s = 1'b0;
+		#10;
+		load = 1'b0;
+		#5;
+
+		if (sim_out != 16'd50) begin
+			$display("datapath error expected: %d, actual: %d", 16'd50,sim_out);
+			err = 1'b1;
+		end
+
+		//test ADD instruction with REG[0] and REG[1] and store in REG[2]
+		in = 16'b100_00_000_010_00_001; //REG[2] = REG[0]+REG[1]  = 150;
+		load = 1'b1;
+		reset = 1'b0;
+		s = 1'b0;
+		#10;
+		load = 1'b0;
+		#5;
+
+		if (sim_out != 16'd150) begin
+			$display("datapath error expected: %d, actual: %d", 16'd150,sim_out);
+			err = 1'b1;
+		end
 	end
 endmodule
