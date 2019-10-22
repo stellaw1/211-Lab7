@@ -51,6 +51,7 @@ module cpu(clk,reset,s,load,in,out,N,V,Z,w);
 	//altered datapath from lab5 with inputs from instruction decoder and FSM controller
 	datapath DP(	.mdata (16'b0),
             .sximm8 (sximm8_DE), 
+            .sximm5 (sximm5_DE),
 			.vsel (vsel_FSM),
 			.writenum (writenum_DE),
 			.write (write_FSM),
