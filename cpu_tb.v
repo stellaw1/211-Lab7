@@ -56,7 +56,7 @@ module cpu_tb();
 		s = 1'b0;
 		#40;
 
-		error_check(16'd100,DUT.DP.REGFILE.data_out,1);
+		error_check(16'd100,DUT.DP.REGFILE.data_out,1'd1);
 
 		// //testcase 2: MOV instruction with shift 
 		// in = 16'b110_00_000_001_10_000; //REG[001] = REG[000] / 2 = 50;
