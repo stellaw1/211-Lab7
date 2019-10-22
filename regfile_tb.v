@@ -43,48 +43,48 @@ module regfile_tb();
         error_checker(16'h42);
         $display("data_out is %b, expecting %b", sim_data_out, 16'h42);
 
-        // //initialize signals
-        // sim_clk = 1'b0;
-        // err = 1'b0;
-        // sim_data_in = 16'b1;
-        // #5;
+        //initialize signals
+        sim_clk = 1'b0;
+        err = 1'b0;
+        sim_data_in = 16'b1;
+        #5;
 
-        // //testcase 1: test writing and reading with register 0, data_in = 16'b1
-        // sim_writenum = 3'b0;
-        // sim_write = 1'b1;
-        // sim_readnum = 3'b0;
-        // #10;
+        //testcase 1: test writing and reading with register 0, data_in = 16'b1
+        sim_writenum = 3'b0;
+        sim_write = 1'b1;
+        sim_readnum = 3'b0;
+        #10;
 
-        // error_checker(16'b1);
-        // $display("data_out is %b, expecting %b", sim_data_out, 16'b1);
+        error_checker(16'b1);
+        $display("data_out is %b, expecting %b", sim_data_out, 16'b1);
 
-        // //testcase 3: 
-        // sim_write = 1;
-        // sim_data_in = 16'h42;
-        // sim_writenum = 0;
-        // sim_readnum = 0;
-        // #5;
+        //testcase 3: 
+        sim_write = 1;
+        sim_data_in = 16'h42;
+        sim_writenum = 0;
+        sim_readnum = 0;
+        #5;
 
-        // sim_clk = 1;
-        // #5;
-        // sim_clk = 0;
-        // #5;
+        sim_clk = 1;
+        #5;
+        sim_clk = 0;
+        #5;
 
-        // $display("data_0 is %b, expecting %b", DUT.data_0, 16'b1000010);
-        // $display("data_out is %b, expecting %b", sim_data_out, 16'b1000010);
+        $display("data_0 is %b, expecting %b", DUT.data_0, 16'b1000010);
+        $display("data_out is %b, expecting %b", sim_data_out, 16'b1000010);
 
-        // //testcase 3: test writing to register 0, data_in = 16'b1
-        // sim_data_in = 16'b0000000000000010;
-        // sim_writenum = 3'b1;
-        // sim_write = 1'b1;
-        // #5;
+        //testcase 3: test writing to register 0, data_in = 16'b1
+        sim_data_in = 16'b0000000000000010;
+        sim_writenum = 3'b1;
+        sim_write = 1'b1;
+        #5;
 
-        // sim_clk = 1;
-        // #5;
-        // sim_clk = 0;
-        // #5;
+        sim_clk = 1;
+        #5;
+        sim_clk = 0;
+        #5;
 
-        // $display("data_1 is %b, expecting %b", DUT.data_1, 16'b0000000000000010);
+        $display("data_1 is %b, expecting %b", DUT.data_1, 16'b0000000000000010);
 
         
         //print results, whether errors were found
