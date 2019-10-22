@@ -34,8 +34,8 @@ module datapath(mdata, sximm8, vsel, writenum, write, readnum, clk, loada, loadb
     assign Ain = asel ? 16'b0 : fromAtoMux6;
     assign Bin = bsel ? sximm5 : sout;
 
-    // Mux2 #(16) mux6(16'b0, fromAtoMux6, asel, Ain);
-    // Mux2 #(16) mux7({11'b0, datapath_in[4:0]}, sout, bsel, Bin);
+    Mux2 #(16) mux6(16'b0, fromAtoMux6, asel, Ain);
+    Mux2 #(16) mux7({{11'b0, datapath_in[4:0]}}, sout, bsel, Bin);
 
     //instantiate block 2: ALU unit
     ALU alu2(Ain, Bin, ALUop, out, zero);
