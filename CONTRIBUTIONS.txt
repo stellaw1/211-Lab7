@@ -3,19 +3,19 @@ Baknel Macz & Stella Wang
 
 
 Abstract: 
-We started working on Lab5 on October 6th at MCLD room 348 computer lab. We started working at 2:00 PM and called it a day at 7:00PM. Then, we met up again on Monday October 7th at LIFE to continue working on it, but we couldn't figure out the bug so we met up again on Tuesday October 8th at 9:00 AM in the same MCLD lab to finish up everything. 
+We started working on Lab6 on October 20th at MCLD room 348 computer lab. We started working at 1:00 PM and called it a day at 5:00PM. Then, we met up again on Monday October 21th in MCLD 348 where we finished the bulk of the remaining work
 
 Development Sequence:
 - Stella created a private GitHub repo for writing code
-- Stella wrote all of regfile.v and regfile_tb.v. Stella debugged both these files and checked everything on ModelSim was working on ModelSim. 
-- Baknel wrote all of alu.v and alu_tb.v. Baknel debugged both these files and checked everything on ModelSim was working on ModelSim. 
-- Stella wrote all of shifter.v and shifter_tb.v. Baknel debugged both of these files and checked everything was working on ModelSim. 
-- Stella checked that all three of regfile, ALU, and shifter were compatible with autograder check1
-- Baknel checked that all three of regfile, ALU, and shifter were compatible with autograder check2, and Stella debugged for like a couple hours because regfile wasn't passing the test
-- Stella wrote all of datapath.v
-- Baknel wrote all of datapath_tb.v and checked that everything passed in ModelSim. 
-- Stella checked that datapath was compatible with autograder check3, and Baknel debugged for like a lot of hours after because there was a bug which ended up being one of the inputs and outputs in a module instantiation in datapath being switched. 
-- Baknel wrote all the code for seg in lab5_top.v, while Stella compiled everything on Quartus, which sadly made her computer freeze a couple times but it worked in the end!
-- Baknel finalized everything by gathering all the correct files in the same project on ModelSim, and saved the correct wave forms. 
-- Baknel compiled the finalized code on Quartus and loaded it on the De1-SoC board for testing. 
-- Baknel wrote a list of operations to test using the De1-SoC and Stella used the De1-
+- Stella wrote the adjustments to our code from Lab 5 including the changes to the datapath in MUX, and shifter select module in datapath.v
+-Baknel wrote the module instantiation of the instruction register in cpu.v
+-Baknel wrote the cpu.v file connecting the blocks of the RISC in cpu.v
+-Stella wrote the instruction decoder in cpu.v
+-Stella began writing the FSM controller in cpu.v, our first implementation included just the ADD instruction as a proof of concept
+-Baknel expanded the FSM implementation to include the 5 other instructions, and control the outputs to both the datapath module and instruction decoder
+-Stella spent considerable time debugging FSM, problems mostly occured in port connections, both names and sizes
+-Baknel began writing the test bench for cpu.v in cpu_tb.v to include one basic test of the MOVim MOV and ADD instructions
+-Stella added functionality to the test bench creating further tests for other edge cases and possible bugs. Test suite contains 3 tests for every instruction
+-Baknel assisted in the debugging of cpu_tb.v before the lab was completed
+-Stella succesfully tested the code in ModelSim and compiled it in Quartus to then further test on De1-Soc
+-Baknel created a series of tests to use on the De1-Soc to demonstrate the functionality of the code to the TA
