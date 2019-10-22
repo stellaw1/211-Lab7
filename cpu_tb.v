@@ -18,13 +18,13 @@ module cpu_tb();
 			.Z (sim_Z),
 			.w (sim_w) );
 	
-	//automatic error checker 
+	//automatic error checker checks expected versus actual value, and assigns it an error id number
 	task error_check;
-        input [15:0] expected_sim_out;
+        input [15:0] expected, actual, err_num;
         begin
             //if the data_out in the instantiated DUT is erraneous, display the actual and expected state, and set err = 1
-            if (sim_out !== expected_sim_out) begin
-				$display("out error expected: %d, actual: %d", expected_sim_out, DUT.out);
+            if (actual !== expected) begin
+				$display("out error expected: %d, actual: %d error: %d", expected, actual, err_num);
 				err = 1'b1;
 			end
         end
@@ -45,6 +45,7 @@ module cpu_tb();
 		err = 1'b0;
 		s = 1'b0;
 		reset = 1'b0;
+		#25;
 
 		//testcase 1: MOV immediate instruction
 		in = 16'b110_10_000_01100100; //REG[000] = 100
@@ -55,7 +56,7 @@ module cpu_tb();
 		s = 1'b0;
 		#40;
 
-		error_check(16'd100);
+		error_check(16'd100,DUT.DP.REGFILE.data_out,1);
 
 		// //testcase 2: MOV instruction with shift 
 		// in = 16'b110_00_000_001_10_000; //REG[001] = REG[000] / 2 = 50;
@@ -84,7 +85,7 @@ module cpu_tb();
 
 		//print results, whether errors were found
         if (~err) 
-            $display ("All test cases passed with no errors. ");
+            $display ("ya i knew it would work. EZ");
         else
             $display ("Error found. ");
 

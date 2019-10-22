@@ -106,7 +106,7 @@ module Mux3(a2, a1, a0, s, b);
 		     ({k{s[2]}} & a2);
 endmodule
 
-`define WAIT 5'b00000
+`define WAIT 5'b11111
 `define MOVim1 5'b00001
 `define MOVim2 5'b00010
 `define MOVim3 5'b00011
@@ -147,16 +147,7 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
     reg [4:0] present_state;
 
     always @(posedge clk) begin
-	    //initialize signals to all 0's
-        vsel = 4'b0;
-        write = 1'b0;
-        loada = 1'b0;
-        loadb = 1'b0;
-        loadc = 1'b0;
-        loads = 1'b0;
-        asel = 1'b0;
-        bsel = 1'b0;
-        
+      
 	    //set next state
         casex ({reset,s,present_state}) 
             //if reset 1 and other inputs anything, go to WAIT
@@ -200,17 +191,17 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
 
         //set outputs depending on which state
         case(present_state) 
-            `WAIT: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b0;
+            `WAIT: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b000_000_000_000_001;
             
             //write sximm8 from decoder to Rd
-            `MOVim1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0100_1_0_0_0_0_0_0_100_1;
+            `MOVim1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0100_1_0_0_0_0_0_0_100_0;
             
             //load from register Rm into B
             `MOV1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_1_0_0_0_0_001_0;
             //perform shift on value and load into C
             `MOV2: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_0_1_0_1_0_000_0;
             //write value to Rd
-            `MOV3: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_1;
+            `MOV3: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_0;
 
             //load Rn into A
             `ADD1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_1_0_0_0_0_0_100_0;
@@ -219,7 +210,7 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
             //ADD values at A and sh_B and load into C
             `ADD3: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_0_1_0_0_0_000_0;
             //write value at C into Rd
-            `ADD4: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_1;
+            `ADD4: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_0;
 
             //load Rn into A
             `CMP1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_1_0_0_0_0_0_100_0;
@@ -235,14 +226,14 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
             //AND A and sh_B and load into C
             `AND3: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_0_1_0_0_0_000_0;
             //write value of C into Rd
-            `AND4: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_1;
+            `AND4: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_0;
 
             //load Rm into B
             `MVN1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_1_0_0_0_0_001_0;
             //load NOT sh_B into C
             `MVN2: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_0_1_0_0_0_000_0;
             //write value of C into Rd
-            `MVN3: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_1;
+            `MVN3: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0001_1_0_0_0_0_0_0_010_0;
 
             default: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 12'bxxxxxxxxxxxx;
         endcase
