@@ -107,6 +107,7 @@ module Mux3(a2, a1, a0, s, b);
 endmodule
 
 `define WAIT 5'b11111
+`define STAT 5'b00000
 `define MOVim1 5'b00001
 `define MOVim2 5'b00010
 `define MOVim3 5'b00011
@@ -152,8 +153,10 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
         casex ({reset,s,present_state}) 
             //if reset 1 and other inputs anything, go to WAIT
             {1'b1,1'bx,5'bxxxxx}: present_state = `WAIT;
+	    //if status 1 and reset 0 go to status
+	    {1'b0,1'b1,`WAIT}: present_state = `STAT;
             //if reset 0 and s set to 1, start next instruction
-            {1'b0,1'b1,`WAIT} : case ({opcode,op}) 
+            {1'b0,1'b0,`WAIT} : case ({opcode,op}) 
                         5'b110_10: present_state = `MOVim1;
                         5'b110_00: present_state = `MOV1;
                         5'b101_00: present_state = `ADD1;
@@ -191,7 +194,8 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
 
         //set outputs depending on which state
         case(present_state) 
-            `WAIT: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b000_000_000_000_001;
+            `WAIT: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_0_0_0_0_0_000_1;
+	    `STAT: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0000_0_0_0_0_1_0_0_000_0;
             
             //write sximm8 from decoder to Rd
             `MOVim1: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,w} = 15'b_0100_1_0_0_0_0_0_0_100_0;
