@@ -12,7 +12,7 @@ module shifter(in, shift, sout);
             2'b01: shiftee = in << 1;
             2'b10: shiftee = in >> 1;
             2'b11: 
-                shiftee = $signed (in)<<<1;
+                shiftee = $signed (in)>>>1;
             default: shiftee = 16'bxxxxxxxxxxxxxxxx;
         endcase
     end
