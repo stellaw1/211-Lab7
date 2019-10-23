@@ -24,7 +24,7 @@ module cpu_tb();
         begin
             //if the data_out in the instantiated DUT is erraneous, display the actual and expected state, and set err = 1
             if (actual !== expected) begin
-				$display("out error expected: %d, actual: %d error: %d", expected, actual, err_num);
+				$display("ERROR: expected: %d, actual: %d at testcase %d", expected, actual, err_num);
 				err = 1'b1;
 			end
         end
@@ -83,10 +83,11 @@ module cpu_tb();
 
 		error_check(16'd150,sim_out,3);
 
-		// //testcase 4: test reset
-		// reset = 1'b1;
+		//testcase 4: test reset
+		reset = 1'b1;
+		#10;
 
-		// error_check(16'd150);
+		error_check(5'b11111, DUT.FSM.present_state, 15);
 
 		//print results, whether errors were found
         if (~err) 
