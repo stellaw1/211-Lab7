@@ -19,7 +19,7 @@ module cpu_tb();
 			.w (sim_w) );
 	
 	//automatic error checker checks expected versus actual value, and assigns it an error id number
-	task error_check;
+    task error_check;
         input [15:0] expected, actual, err_num;
         begin
             //if the data_out in the instantiated DUT is erraneous, display the actual and expected state, and set err = 1
@@ -50,8 +50,6 @@ module cpu_tb();
 		//testcase 1: MOV immediate instruction
 		in = 16'b110_10_000_01100100; //REG[000] = 100
 		load = 1'b1;
-		#10;
-		s = 1'b1;
 		#40;
 		load = 1'b0;
 		s = 1'b0;
@@ -62,8 +60,6 @@ module cpu_tb();
 		//testcase 2: MOV instruction with shift 
 		in = 16'b110_00_000_001_10_000; //REG[001] = REG[000] / 2 = 50;
 		load = 1'b1;
-		#10;
-		s = 1'b1;
 		#40;
 		load = 1'b0;
 		s = 1'b0;
@@ -74,8 +70,6 @@ module cpu_tb();
 		//testcase 3: ADD instruction with REG[0] and REG[1] and store in REG[2]
 		in = 16'b101_00_000_010_00_001; //REG[2] = REG[0]+REG[1]  = 150;
 		load = 1'b1;
-		#10;
-		s = 1'b1;
 		#40;
 		load = 1'b0;
 		s = 1'b0;
