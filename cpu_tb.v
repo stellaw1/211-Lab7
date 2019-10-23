@@ -50,33 +50,38 @@ module cpu_tb();
 		//testcase 1: MOV immediate instruction
 		in = 16'b110_10_000_01100100; //REG[000] = 100
 		load = 1'b1;
+		#10;
 		s = 1'b1;
 		#40;
 		load = 1'b0;
 		s = 1'b0;
 		#40;
 
-		error_check(16'd100,DUT.DP.REGFILE.data_out,1'd1);
+		error_check(16'd100,DUT.DP.REGFILE.Reg0.out,1);
 
-		// //testcase 2: MOV instruction with shift 
-		// in = 16'b110_00_000_001_10_000; //REG[001] = REG[000] / 2 = 50;
-		// load = 1'b1;
-		// s = 1'b1;
-		// #30;
-		// load = 1'b0;
-		// #10;
+		//testcase 2: MOV instruction with shift 
+		in = 16'b110_00_000_001_10_000; //REG[001] = REG[000] / 2 = 50;
+		load = 1'b1;
+		#10;
+		s = 1'b1;
+		#40;
+		load = 1'b0;
+		s = 1'b0;
+		#40;
 
-		// error_check(16'd50);
+		error_check(16'd50,DUT.DP.REGFILE.Reg1.out,2);
 
-		// //testcase 3: ADD instruction with REG[0] and REG[1] and store in REG[2]
-		// in = 16'b100_00_000_010_00_001; //REG[2] = REG[0]+REG[1]  = 150;
-		// load = 1'b1;
-		// s = 1'b1;
-		// #40;
-		// load = 1'b0;
-		// #10;
+		//testcase 3: ADD instruction with REG[0] and REG[1] and store in REG[2]
+		in = 16'b101_00_000_010_00_001; //REG[2] = REG[0]+REG[1]  = 150;
+		load = 1'b1;
+		#10;
+		s = 1'b1;
+		#40;
+		load = 1'b0;
+		s = 1'b0;
+		#40;
 
-		// error_check(16'd150);
+		error_check(16'd150,sim_out,3);
 
 		// //testcase 4: test reset
 		// reset = 1'b1;
