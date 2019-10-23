@@ -24,7 +24,7 @@ module cpu_tb();
         begin
             //if the data_out in the instantiated DUT is erraneous, display the actual and expected state, and set err = 1
             if (actual !== expected) begin
-				$display("ERROR: expected: %d, actual: %d at testcase %d", expected, actual, err_num);
+				$display("out error expected: %d, actual: %d error: %d", expected, actual, err_num);
 				err = 1'b1;
 			end
 			else begin
@@ -216,7 +216,6 @@ module cpu_tb();
 
 
 
-		//print results, whether errors were found
         if (~err) 
             $display ("ya i knew it would work. EZ");
         else
