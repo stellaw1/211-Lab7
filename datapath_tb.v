@@ -171,44 +171,65 @@ module datapath_tb();
     error_check(16'd18110, DUT.REGFILE.R2, 7);
     error_check(0, sim_Z, 8);
 
+    error_check(16'd66, DUT.pipeB.out, 9);
 
-    //test case 4: test V overflow flag by loading 16'b11111111 to Reg5 and ADD R5 + R3 = 255 + 66 = 321
-    sim_sximm8 = 16'b11111111;
-    sim_write = 1'b1;
-    sim_writenum = 3'b101;
-    sim_readnum = 3'b101;
-    sim_loada = 1'b1;
-    #40;
+
+    //test case 4: test V overflow flag and N negative flag 
+    //  using SUB R5, R7, R3 with R1 = -32767 - 66 = - 32833 = 65601 = 16'b1111111111111111 - 16'b1000010 = 16'b01_00000000_01000001
     
+    //write 16'b1111111111111111 to R7
+    sim_writenum = 3'b111;
+    sim_sximm8 = 16'b1111111111111111;
+    sim_write = 1'b1;
+    sim_loada = 1;
+    sim_readnum = 3'b111;
+    #40;
+
+    sim_write = 0;
+    #10;
+
+    error_check(16'b1111111111111111, DUT.REGFILE.R7, 10);
+    error_check(16'b1111111111111111, DUT.pipeA.out, 11);
+
+    //load SUB R5, R7, R3 to C and datapath_out 
+    sim_ALUop = 2'b01;
     sim_loadc = 1'b1;
     sim_loads = 1'b1;
     #20;
+    sim_ALUop = 2'b00;
+    #10;
 
-    error_check(16'd321, sim_datapath_out, 9);
-    error_check(0, sim_Z, 10);
-    error_check(1, sim_V, 11);
+    error_check(16'b01_00000000_01000001, sim_datapath_out, 12);
+    error_check(0, sim_Z, 13);
+    error_check(1, sim_V, 14);
+    error_check(1, sim_N, 15);
 
-    sim_write = 1'b0;
     sim_loads = 0;
     #10;
 
 
-    //testcase 8: SUB R0 - R5
+    //testcase 8: SUB R6, R0, R1
+    //  R6 = 0 - 17978 = - 17978 = 16'b11000110_00111010
     sim_readnum = 3'b0;
     sim_loada = 1;
     #10;
-    sim_readnum = 3'b101;
+    sim_loada = 0;
+    #10;
+
+    sim_readnum = 3'b001;
     sim_loadb = 1;
     #10;
-    sim_ALUop = 2'b01;
+    sim_loadb = 0;
+    #10;
+    
     sim_loadc = 1'b1;
     sim_loads = 1;
     #10;
 
-    error_check(16'd43381, sim_datapath_out, 12);
-    error_check(0, sim_Z, 13);
-    error_check(1, sim_N, 14);
-    error_check(1, sim_V, 15);
+    error_check(16'd17978, sim_datapath_out, 16);
+    error_check(0, sim_Z, 17);
+    error_check(1, sim_N, 18);
+    error_check(0, sim_V, 19);
     
 
 

@@ -40,11 +40,7 @@ module datapath(mdata, sximm8, sximm5, vsel, writenum, write, readnum, clk, load
     assign Bin = bsel ? sximm5 : sout;
 
     //instantiate block 2: ALU unit
-    ALU alu2(Ain, Bin, ALUop, out, zero);
-
-     //Z = zero flag, N = negative flag, V = overflow flag
-    assign negative = out[15] ? 1'b1 : 1'b0;
-    assign overflow = ( ~( Ain[15] ^ Bin[15]) ^ out[15] ) ? 1'b1 : 1'b0; //DEBUG
+    ALU alu2(Ain, Bin, ALUop, out, zero, overflow, negative);
 
     //instantiate block 5: pipeline register C
     vDFFE #(16) pipeC(clk, loadc, out, datapath_out);

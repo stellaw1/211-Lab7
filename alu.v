@@ -1,8 +1,8 @@
-module ALU(Ain, Bin, ALUop, out, Z);
+module ALU(Ain, Bin, ALUop, out, Z, V, N);
   input [15:0] Ain, Bin;
   input [1:0] ALUop;
   output [15:0] out;
-  output Z;
+  output Z, V, N;
 
   wire [15:0] add_val, sub_val, and_val, not_b;
   
@@ -15,8 +15,13 @@ module ALU(Ain, Bin, ALUop, out, Z);
   
   //MUX that selects which operation to output 
   Mux_k_4_binary #(16) alu_MUX(not_b,and_val,sub_val,add_val, ALUop, out);
+
   assign Z = ~(|out); //assign Z = 1 if output is all 0's
+  assign N = out[15];
+  assign V = ((Ain[15] ^ Bin[15]) & ~( Ain[15] ^ out[15] )) ? 1'b1 : 1'b0;
+
 endmodule
+
 
 //k bit ,4 input, binary select MUX
 module Mux_k_4_binary(a3, a2, a1, a0, sb, b);
@@ -30,6 +35,7 @@ module Mux_k_4_binary(a3, a2, a1, a0, sb, b);
   Mux4 #(k) m(a3, a2, a1, a0, s, b); 
 endmodule
   
+
 //4 input k bit MUX, one hot select
 module Mux4(a3, a2, a1, a0, s, b);
   parameter k = 1;
