@@ -18,15 +18,19 @@ module datapath(mdata, sximm8, sximm5, vsel, writenum, write, readnum, clk, load
     assign mdata = 16'b0;
     assign PC = 8'b0;
 
-    //instantiate block 9: first 4 bit MUX
+    //instantiate block 9: first 4 bit one-hot MUX. 
+    //  vsel = 1000: mdata
+    //  vsel = 0100: sximm8
+    //  vsel = 0010: {8'b0, PC}
+    //  vsel = 0001: datapath_out
     Mux4 #(16) mux1(mdata, sximm8, {8'b0, PC}, datapath_out, vsel, data_in);
 
     //instantiate block 1: register file
     regfile REGFILE(data_in, writenum, write, readnum, clk, data_out);
 
     //instantiat blocks 3 and 4: pipeline register A and B
-    vDFFE #(16) pipeA(clk, loada, data_out, fromAtoMux6); //DEBUG
-    vDFFE #(16) pipeB(clk, loadb, data_out, fromBtoShifter); //DEBUG
+    vDFFE #(16) pipeA(clk, loada, data_out, fromAtoMux6); 
+    vDFFE #(16) pipeB(clk, loadb, data_out, fromBtoShifter); 
 
     //instantiate block 8: shifter unit
     shifter shifter8(fromBtoShifter, shift, sout);  
@@ -40,7 +44,7 @@ module datapath(mdata, sximm8, sximm5, vsel, writenum, write, readnum, clk, load
 
      //Z = zero flag, N = negative flag, V = overflow flag
     assign negative = out[15] ? 1'b1 : 1'b0;
-    assign overflow = ( Ain[15] & Bin[15] & ~out[15] ) | ( ~Ain[15] & ~Bin[15] & out[15]) ? 1'b1 : 1'b0;
+    assign overflow = ( ~( Ain[15] ^ Bin[15]) ^ out[15] ) ? 1'b1 : 1'b0; //DEBUG
 
     //instantiate block 5: pipeline register C
     vDFFE #(16) pipeC(clk, loadc, out, datapath_out);
