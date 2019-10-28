@@ -85,6 +85,7 @@ module ALU_tb();
     sim_ALUop = 2'b01;
     #5;
 
+    $display("overflow flag");
     error_check(1, sim_V);
 
 

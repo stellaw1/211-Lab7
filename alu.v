@@ -18,7 +18,8 @@ module ALU(Ain, Bin, ALUop, out, Z, V, N);
 
   assign Z = ~(|out); //assign Z = 1 if output is all 0's
   assign N = out[15];
-  assign V = ((Ain[15] ^ Bin[15]) & ~( Ain[15] ^ out[15] )) ? 1'b1 : 1'b0;
+  assign V = ~(Ain[15] ^ ~Bin[15]) & (Ain[15] ^ out[15]);
+  //((Ain[15] ^ Bin[15]) & ~( Ain[15] ^ out[15] ));
 
 endmodule
 
