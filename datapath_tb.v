@@ -179,7 +179,7 @@ module datapath_tb();
     
     //write 16'b1111111111111111 to R7
     sim_writenum = 3'b111;
-    sim_sximm8 = 16'b1111111111111111;
+    sim_sximm8 = 16'b11111111_11111111;
     sim_write = 1'b1;
     sim_loada = 1;
     sim_readnum = 3'b111;
@@ -196,8 +196,6 @@ module datapath_tb();
     sim_loadc = 1'b1;
     sim_loads = 1'b1;
     #20;
-    sim_loadc = 0;
-    #10;
 
     error_check(16'b11111111_10111101, sim_datapath_out, 12);
     error_check(0, sim_Z, 13);

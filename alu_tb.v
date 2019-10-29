@@ -2,10 +2,10 @@ module ALU_tb();
   reg [15:0] sim_ain, sim_bin;
   wire [15:0] sim_out;
   reg [1:0] sim_ALUop;
-  wire sim_Z, sim_V, sim_N;
+  wire [2:0] sim_status; //status[0]=Z, status[1]=N, status[2]=V
   reg err;
 
-  ALU DUT(sim_ain, sim_bin, sim_ALUop, sim_out, sim_Z, sim_V, sim_N);
+  ALU DUT(sim_ain, sim_bin, sim_ALUop, sim_out, sim_status);
 
   task error_check;
     input [15:0] expected, actual;
@@ -65,7 +65,8 @@ module ALU_tb();
     sim_ALUop = 2'b00;
     #5;
 
-    error_check(1, sim_Z);
+    $display ("Z");
+    error_check(1, sim_status[0]); //check Z flag
 
     //test Negative flag with 1 - 32 = -31
     sim_ain = 16'b0_0000000_00000001; //1
@@ -75,18 +76,41 @@ module ALU_tb();
     sim_ALUop = 2'b01;
     #5;
 
-    error_check(1, sim_N);
+    $display ("N");
+    error_check(1, sim_status[1]); // check N flag
 
-    //test Overflow flag with 32767 - (-32513) = 16'b11111111_00000000
-    sim_ain = 16'b0_1111111_11111111; //1
-    sim_bin = 16'b1_1111111_00000001;//32
+    // //test Overflow flag with 32767 - (-32513) = 16'b11111111_00000000
+    // sim_ain = 16'b0_1111111_11111111; //1
+    // sim_bin = 16'b1_1111111_00000001;//32
+    // #5;
+
+    // sim_ALUop = 2'b01;
+    // #5;
+
+    // $display ("V");
+    // error_check(1, sim_status[2]); //check V flag
+
+    //test V with 2 - 7. expect V = 0
+    sim_ain = 16'b0_0000000_00000010; //2
+    sim_bin = 16'b0_0000000_00000111;//7
     #5;
 
     sim_ALUop = 2'b01;
     #5;
 
-    $display("overflow flag");
-    error_check(1, sim_V);
+    $display ("V 2");
+    error_check(0, sim_status[2]); //check V flag
+
+    //test V with 0x8000 - 2. expect V = 1
+    sim_ain = 16'b1_0000000_00000000; //0x8000
+    sim_bin = 16'b0_0000000_00000010;//2
+    #5;
+
+    sim_ALUop = 2'b01;
+    #5;
+
+    $display ("V 3");
+    error_check(1, sim_status[2]); //check V flag
 
 
     //print results, whether errors were found

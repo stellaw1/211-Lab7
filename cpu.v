@@ -1,21 +1,26 @@
-module cpu(clk,reset,s,load,in,out,N,V,Z,w);
+module cpu(clk,reset,s,load,in,out,V, N, Z,w);
 	input clk, reset, s ,load;
 	input [15:0] in;
 	output [15:0] out;
-	output N, V, Z, w;
+	output V, N, Z, w;
 
 	wire [15:0] instr_regout;
     wire [8:0] next_pc, pc_out, cpu_out, count
 
-    Counter plus1(clk, reset, count); //reset??
+    //PC Counter
+    Counter plus1(clk, pc_out, count); //DEBUG: reset = pc_out??
 
+    //Mux2 to PC
     assign next_pc = reset_pc? 9'b0 : count;
-    assign cpu_out = addr_sel? pc_out : 9'b0;
 
+    //Mux2 to Memory block
+    assign mem_addr = addr_sel? pc_out : 9'b0;
+
+    //PC
     vDFFE #(9) PC(clk, load_pc, next_pc, pc_out);
 
 	//16 bit instruction register, holds instruction from input and decodes to FSM and datapath
-	vDFFE #(16) instr_reg(clk, load, in, instr_regout);
+	vDFFE #(16) instr_reg(clk, load_ir, in, instr_regout);
 	
 	wire [2:0] opcode_DE, readnum_DE, writenum_DE, nsel_FSM;
     	wire [1:0] ALUop_DE;

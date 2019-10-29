@@ -1,50 +1,41 @@
-module ALU(Ain, Bin, ALUop, out, Z, V, N);
-  input [15:0] Ain, Bin;
-  input [1:0] ALUop;
-  output [15:0] out;
-  output Z, V, N;
+//Lab 5 Code taken from Arnold Ying and Rain Zhang
+module ALU(Ain, Bin, ALUop, out, status);
+    input [15:0] Ain, Bin;
+    input [1:0] ALUop;
+    output [15:0] out;
+    output [2:0] status; //status[0]=Z, status[1]=N, status[2]=V
 
-  wire [15:0] add_val, sub_val, and_val, not_b;
-  
-  //calculate possible output values
-  assign add_val = Ain + Bin;
-  assign sub_val = Ain - Bin;
-  assign and_val = Ain & Bin;
-  assign not_b = ~Bin;
+    reg [15:0] out;
+    reg [2:0] status;
 
-  
-  //MUX that selects which operation to output 
-  Mux_k_4_binary #(16) alu_MUX(not_b,and_val,sub_val,add_val, ALUop, out);
+    always @(*) begin
+        //checks the selection and assign out correspondingly with Ain and Bin
+        case (ALUop)
+            2'b00: out = Ain + Bin;
+            2'b01: out = Ain - Bin;
+            2'b10: out = Ain & Bin;
+            2'b11: out = ~Bin;
+            //prevent inferred latches
+            default: out = 16'bxxxx_xxxx_xxxx_xxxx;
+        endcase
 
-  assign Z = ~(|out); //assign Z = 1 if output is all 0's
-  assign N = out[15];
-  assign V = ~(Ain[15] ^ ~Bin[15]) & (Ain[15] ^ out[15]);
-  //((Ain[15] ^ Bin[15]) & ~( Ain[15] ^ out[15] ));
+        //assigns the first bit of status value with non-blocking assignment - zero status
+        if (out == 0)
+            status[0] <= 1;
+        else
+            status[0] <= 0;
 
-endmodule
+        //assigns the second bit of status value with non-blocking assignment - neg status
+        if (out[15] == 1)
+            status[1] <= 1;
+        else
+            status[1] <= 0;
 
+        //assigns the third bit of status value with non-blocking assignment - ovf status
+        if ((Ain[15] ^ Bin[15]) & (Ain[15] ^ out[15]) )
+            status[2] <= 1;
+        else
+            status[2] <= 0;
 
-//k bit ,4 input, binary select MUX
-module Mux_k_4_binary(a3, a2, a1, a0, sb, b);
-  parameter k = 1 ;
-  input [k-1:0] a3, a2, a1, a0; //inputs
-  input [1:0] sb; //select
-  output [k-1:0] b;
-  wire [3:0] s;
-
-  Dec #(2,4) de(sb, s); //decoder takes binary input and gives one hot output
-  Mux4 #(k) m(a3, a2, a1, a0, s, b); 
-endmodule
-  
-
-//4 input k bit MUX, one hot select
-module Mux4(a3, a2, a1, a0, s, b);
-  parameter k = 1;
-  input [k-1:0] a3, a2, a1, a0; //inputs
-  input [3:0] s; //select
-  output [k-1:0] b;
-  wire [k-1:0] b =   ({k{s[0]}} & a0) |
-		     ({k{s[1]}} & a1) |
-		     ({k{s[2]}} & a2) |
-		     ({k{s[3]}} & a3) ;
+    end
 endmodule
