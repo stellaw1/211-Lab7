@@ -15,7 +15,6 @@ module datapath(mdata, sximm8, sximm5, vsel, writenum, write, readnum, clk, load
     wire [2:0] status;
 
     //assign zero to mdata and PC
-    assign mdata = 16'b0;
     assign PC = 8'b0;
 
     //instantiate block 9: first 4 bit one-hot MUX. 

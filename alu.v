@@ -1,4 +1,4 @@
-//Lab 5 Code taken from Arnold Ying and Rain Zhang
+//Source: Lab 5 Code taken from Arnold Ying and Rain Zhang
 module ALU(Ain, Bin, ALUop, out, status);
     input [15:0] Ain, Bin;
     input [1:0] ALUop;

@@ -1,0 +1,47 @@
+//3 input k bit MUX, one hot select
+module Mux3(a2, a1, a0, s, b);
+  parameter k = 1;
+  input [k-1:0] a2, a1, a0; //inputs
+  input [2:0] s; //select
+  output [k-1:0] b;
+  wire [k-1:0] b = ({k{s[0]}} & a0) |
+		     ({k{s[1]}} & a1) |
+		     ({k{s[2]}} & a2);
+endmodule
+
+
+  //MUX that selects which operation to output 
+  Mux_k_4_binary #(16) alu_MUX(not_b,and_val,sub_val,add_val, ALUop, out);
+
+  assign Z = ~(|out); //assign Z = 1 if output is all 0's
+  assign N = out[15];
+  assign V = ~(Ain[15] ^ ~Bin[15]) & (Ain[15] ^ out[15]);
+  //((Ain[15] ^ Bin[15]) & ~( Ain[15] ^ out[15] ));
+
+endmodule
+
+
+//k bit ,4 input, binary select MUX
+module Mux_k_4_binary(a3, a2, a1, a0, sb, b);
+  parameter k = 1 ;
+  input [k-1:0] a3, a2, a1, a0; //inputs
+  input [1:0] sb; //select
+  output [k-1:0] b;
+  wire [3:0] s;
+
+  Dec #(2,4) de(sb, s); //decoder takes binary input and gives one hot output
+  Mux4 #(k) m(a3, a2, a1, a0, s, b); 
+endmodule
+  
+
+//4 input k bit MUX, one hot select
+module Mux4(a3, a2, a1, a0, s, b);
+  parameter k = 1;
+  input [k-1:0] a3, a2, a1, a0; //inputs
+  input [3:0] s; //select
+  output [k-1:0] b;
+  wire [k-1:0] b =   ({k{s[0]}} & a0) |
+		     ({k{s[1]}} & a1) |
+		     ({k{s[2]}} & a2) |
+		     ({k{s[3]}} & a3) ;
+endmodule

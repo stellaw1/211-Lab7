@@ -1,13 +1,15 @@
 CPEN 211 L1E
 Baknel Macz & Stella Wang
 
+NOTE: 
+- alu.v is taken from Arnold Ying and Rain Zhang Lab 6 code. 
 
 Abstract: 
-We started working on Lab6 on October 20th at MCLD room 348 computer lab. We started working at 1:00 PM and called it a day at 5:00PM. Then, we met up again on Monday October 21th in MCLD 348 where we finished the bulk of the remaining work
+We started working on Lab7 on October 29th at Kaiser. We started working at 2:00 PM. 
 
 Development Sequence:
 - Stella created a private GitHub repo for writing code
-- Stella wrote the adjustments to our code from Lab 5 including the changes to the datapath in MUX, and shifter select module in datapath.v
+- Stella wrote the adjustments to our code from Lab 6 including fixing Overflow flag and cpu.v. 
 -Baknel wrote the module instantiation of the instruction register in cpu.v
 -Baknel wrote the cpu.v file connecting the blocks of the RISC in cpu.v
 -Stella wrote the instruction decoder in cpu.v
