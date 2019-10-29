@@ -1,4 +1,3 @@
-
 module cpu(clk,reset,s,load,in,out,N,V,Z,w);
 	input clk, reset, s ,load;
 	input [15:0] in;
@@ -6,6 +5,14 @@ module cpu(clk,reset,s,load,in,out,N,V,Z,w);
 	output N, V, Z, w;
 
 	wire [15:0] instr_regout;
+    wire [8:0] next_pc, pc_out, cpu_out, count
+
+    Counter plus1(clk, reset, count); //reset??
+
+    assign next_pc = reset_pc? 9'b0 : count;
+    assign cpu_out = addr_sel? pc_out : 9'b0;
+
+    vDFFE #(9) PC(clk, load_pc, next_pc, pc_out);
 
 	//16 bit instruction register, holds instruction from input and decodes to FSM and datapath
 	vDFFE #(16) instr_reg(clk, load, in, instr_regout);
@@ -245,3 +252,16 @@ module FSM(s, reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, a
         endcase
     end
 endmodule
+
+
+//taken from SlideSet7
+module Counter(clk, rst, count) ;
+  parameter n=5 ;
+  input rst, clk ; // reset and clock
+  output [n-1:0] count ;
+
+  wire   [n-1:0] next = rst ? 0 : count + 1 ;
+
+  vDFF #(n) CNT(clk, next, count) ;
+endmodule
+
