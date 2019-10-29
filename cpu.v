@@ -1,3 +1,5 @@
+module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel,l oad_ir, load_pc, addr_sel,reset_pc, mem_cmd);
+
 module cpu(clk,reset,s,load,in,out,V, N, Z,w);
 	input clk, reset, s ,load;
 	input [15:0] in;
