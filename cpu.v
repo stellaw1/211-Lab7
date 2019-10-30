@@ -74,7 +74,7 @@ module cpu(clk,reset,in, datapath_out,data_address, V, N, Z, mem_cmd);
 
 
 	//datapath instantiation
-	datapath DP(	.mdata (16'b0),
+	datapath DP(	.mdata (in),
             .sximm8 (sximm8_DE), 
             .sximm5 (sximm5_DE),
 			.vsel (vsel_FSM),
