@@ -32,66 +32,37 @@ module lab7_top(KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
             .dout(mem_dout) );
 
     //memory block tri state driver
-    wire [15:0] mdata;
-    wire dout_en, read_eq, write_eq, msel;
+    wire [15:0] mem_data, switch_data;
+    wire read_flag, read_eq, write_eq, msel;
+
+    assign msel = ~mem_addr[8];
+
+    assign read_eq = (mem_cmd == `MREAD);
+    assign write_eq = (mem_cmd == `MWRITE);
 
     assign write_flag = write_eq & msel;
 
-    EqComp #(2) read_compare(`MREAD, mem_cmd, read_eq);
-    EqComp #(2) write_compare(`MWRITE, mem_cmd, write_eq);
-
-    EqComp #(1) addr_compare(1'b0, mem_addr[8], msel);
-
-    assign dout_en = msel & read_eq;
-    assign read_data = dout_en ? mem_dout : 16'bz;
+    assign read_flag = msel & read_eq;
+    assign mem_data = read_flag ? mem_dout : 16'bz;
 
     //Stage 3 CL block from Switch inputs instantiation
-    //switchInputCL SWinput(SW, mem_addr, mem_cmd, read_data);
+    wire input_eq, switch_en;
+    
+    assign input_eq = (mem_addr == 9'h140);
+    assign switch_en = input_eq & read_eq;
+
+    assign switch_data = switch_en ? {8'b0, SW[7:0]} : 16'bz;
 
     //Stage 3 CL block for LED outputs instantiation
-    //LEDoutputCL LEDoutput(clk, write_data, mem_addr, mem_cmd, LEDR);
+    wire output_en, LED_en;
+
+    assign output_en = (mem_addr == 9'h100);
+    
+    assign LED_en = output_en & write_eq;
+
+    vDFFE #(8) regOut(KEY[0], LED_en, write_data[7:0], LEDR[7:0]);
+
+    //Mux2 for assigning read_data either from memory block or SW inputs
+    assign read_data = ~switch_en ? mem_data : switch_data;
 
 endmodule
-
-//Stage 3 CL block from Switch inputs
-module switchInputCL(SW, mem_addr, mem_cmd, read_data);
-    input [9:0] SW;
-    input [8:0] mem_addr;
-    input [1:0] mem_cmd;
-    output [15:0] read_data;
-
-    wire en, read_eq, addr_eq;
-    reg [15:0] read_data;
-
-    EqComp #(2) read_cmd_compare(mem_cmd, `MREAD, read_eq);
-    EqComp #(9) read_addr_compare(mem_addr, 9'h140, addr_eq);
-
-    assign en = read_eq & addr_eq;
-
-
-    always @(addr_eq) begin
-        if (addr_eq) begin
-            read_data[15:8] = en ? 8'b0 : 1'bz;
-            read_data[7:0] = en ? SW[7:0] : 1'bz;
-        end
-    end
-
-endmodule
-
-//Stage 3 CL block for LED outputs
-module LEDoutputCL(clk, write_data, mem_addr, mem_cmd, LEDR);
-    input clk;
-    input [15:0] write_data;
-    input [8:0] mem_addr;
-    input [1:0] mem_cmd;
-    output [9:0] LEDR;
-
-    wire en, write_eq, addr_eq;
-
-    EqComp #(2) write_cmd_compare(mem_cmd, `MWRITE, write_eq);
-    EqComp #(9) write_addr_compare(mem_addr, 9'h100, addr_eq);
-
-    vDFFE #(8) regOut(clk, en, write_data[7:0], LEDR[7:0]);
-
-endmodule
-
