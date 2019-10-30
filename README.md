@@ -1,6 +1,9 @@
 # CPEN211-Lab7
 
 TO-DO: 
+[.] fix overflow flag in datapath.v
+- debug MOV error in autograder
+
 - stage 1: execute instructions from memory 
   - lab7_top.v
   - 4 new states in FSM

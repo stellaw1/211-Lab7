@@ -24,7 +24,7 @@ module lab7_top(KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
             .mem_cmd(mem_cmd) );
 
     //Read write memory block instantiation
-    RAM #(16, 9, "data.txt") MEM(.clk(~KEY[0]),
+    RAM #(16, 9, "data.txt") MEM(.clk(KEY[0]),
             .read_address(mem_addr),
             .write_address(mem_addr),
             .write(write_flag),

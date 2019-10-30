@@ -1,5 +1,5 @@
-module PC(clk, reset_pc, load_pc, out);
-    input reset_pc, load_pc, clk;
+module PC(reset_pc, load_pc, out);
+    input reset_pc, load_pc;
     output [8:0] out;
     
     wire [8:0] count, next_pc;
