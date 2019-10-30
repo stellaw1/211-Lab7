@@ -17,14 +17,14 @@ module lab7_top(KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
             .reset(~KEY[1]),
             .in(read_data),
             .datapath_out(write_data),
-            .data_address(mem_addr), 
+            .mem_addr(mem_addr), 
             .V(HEX5[3]), 
             .N(HEX5[6]), 
             .Z(HEX5[0]), 
             .mem_cmd(mem_cmd) );
 
     //Read write memory block instantiation
-    RAM #(16, 9, "data.txt") MEM(.clk(~KEY[0]),
+    RAM #(16, 9, "auto.txt") MEM(.clk(~KEY[0]),
             .read_address(mem_addr),
             .write_address(mem_addr),
             .write(write_flag),
@@ -43,33 +43,38 @@ module lab7_top(KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
     EqComp #(1) addr_compare(1'b0, mem_addr[8], msel);
 
     assign dout_en = msel & read_eq;
-    assign read_data = dout_en ? mem_dout : 1'bz;
+    assign read_data = dout_en ? mem_dout : 16'bz;
 
     //Stage 3 CL block from Switch inputs instantiation
-    switchInputCL SWinput(SW, mem_addr, mem_cmd, read_data);
+    //switchInputCL SWinput(SW, mem_addr, mem_cmd, read_data);
 
     //Stage 3 CL block for LED outputs instantiation
-    LEDoutputCL LEDoutput(clk, write_data, mem_addr, mem_cmd, LEDR);
+    //LEDoutputCL LEDoutput(clk, write_data, mem_addr, mem_cmd, LEDR);
 
-    
 endmodule
 
 //Stage 3 CL block from Switch inputs
 module switchInputCL(SW, mem_addr, mem_cmd, read_data);
-    input [7:0] SW;
+    input [9:0] SW;
     input [8:0] mem_addr;
     input [1:0] mem_cmd;
-    output [7:0] read_data;
+    output [15:0] read_data;
 
     wire en, read_eq, addr_eq;
+    reg [15:0] read_data;
 
     EqComp #(2) read_cmd_compare(mem_cmd, `MREAD, read_eq);
-    EqComp #(9) read_addr_compare(mem_addr, 9'b140, addr_eq);
+    EqComp #(9) read_addr_compare(mem_addr, 9'h140, addr_eq);
 
     assign en = read_eq & addr_eq;
 
-    assign read_data[15:8] = en ? 8'b0 : 1'bz;
-    assign read_data[7:0] = en ? SW[7:0] : 1'bz;
+
+    always @(addr_eq) begin
+        if (addr_eq) begin
+            read_data[15:8] = en ? 8'b0 : 1'bz;
+            read_data[7:0] = en ? SW[7:0] : 1'bz;
+        end
+    end
 
 endmodule
 
@@ -79,14 +84,12 @@ module LEDoutputCL(clk, write_data, mem_addr, mem_cmd, LEDR);
     input [15:0] write_data;
     input [8:0] mem_addr;
     input [1:0] mem_cmd;
-    output [7:0] LEDR;
+    output [9:0] LEDR;
 
     wire en, write_eq, addr_eq;
 
     EqComp #(2) write_cmd_compare(mem_cmd, `MWRITE, write_eq);
     EqComp #(9) write_addr_compare(mem_addr, 9'h100, addr_eq);
-
-    assign en = write_eq & addr_eq;
 
     vDFFE #(8) regOut(clk, en, write_data[7:0], LEDR[7:0]);
 
