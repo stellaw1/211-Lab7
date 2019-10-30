@@ -1,28 +1,26 @@
-module cpu(clk,reset,in,out,V, N, Z, addr_sel, mem_cmd);
+module cpu(clk,reset,in, datapath_out,data_address, V, N, Z, mem_cmd);
 	input clk, reset;
 	input [15:0] in;
-	output [15:0] out;
+	output [15:0] datapath_out;
     output [1:0] mem_cmd; 
-    output addr_sel;
+    output [8:0] data_address;
 	output V, N, Z;
 
 	//instantiate PC module
-    wire load_pc, reset_pc, load_ir;
-    wire [8:0] next_pc, pc_out, cpu_out, count;
+    wire load_pc, reset_pc, load_ir, addr_sel;
+    wire [8:0] next_pc, PC, cpu_out, count;
     
-    PC PC(  .reset_pc(reset_pc), 
+    PC myPC(  .reset_pc(reset_pc), 
             .load_pc(load_pc), 
-            .out(pc_out) );
+            .out(PC) );
 
 
     //data address Register
-    wire [8:0] data_address;
-
-    vDFFE #(9) data_addr(clk, load_addr, out[8:0], data_address);
+    vDFFE #(9) data_addr(clk, load_addr, datapath_out[8:0], data_address);
 
 
     //Mux2 to Memory block
-    assign mem_addr = addr_sel? pc_out : data_address;
+    assign mem_addr = addr_sel? PC : data_address;
 
 
 	//16 bit instruction register, holds instruction from input and decodes to FSM and datapath
@@ -95,6 +93,6 @@ module cpu(clk,reset,in,out,V, N, Z, addr_sel, mem_cmd);
 			.Z (Z),
 			.V (V),
 			.N (N),
-			.datapath_out(out) );
+			.datapath_out(datapath_out) );
 	
 endmodule
