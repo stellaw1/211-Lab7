@@ -60,7 +60,8 @@ module lab7_top(KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
     
     assign LED_en = output_en & write_eq;
 
-    vDFFE #(8) regOut(KEY[0], LED_en, write_data[7:0], LEDR[7:0]);
+    vDFFE #(8) regOut(~KEY[0], LED_en, write_data[7:0], LEDR[7:0]);
+    assign LEDR[9:8] = 2'b00;
 
     //Mux2 for assigning read_data either from memory block or SW inputs
     assign read_data = ~switch_en ? mem_data : switch_data;
