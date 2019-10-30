@@ -1,10 +1,10 @@
 //defining state encodings
-`define RST 8'd0
-`define IF1 8'd1
-`define IF2 8'd2
-`define UPDATE 8'd3
-`define DECODE 8'd4
-`define HALT 8'd5
+`define RST 8'b0000_0000
+`define IF1 8'b0000_0001
+`define IF2 8'b0000_0010
+`define UPDATE 8'b0000_0011
+`define DECODE 8'b0000_0100
+`define HALT 8'b0000_0101
 
 `define MOVim1 8'd6
 `define MOVim2 8'd7
@@ -50,7 +50,7 @@
 `define STR6 8'd41
 
 //FSM module definition
-module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel, load_ir, load_pc, addr_sel, load_addr, reset_pc, mem_cmd, load_addr);
+module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel, load_ir, load_pc, addr_sel, load_addr, reset_pc, mem_cmd);
 
     input reset, clk;
     input [2:0] opcode;

@@ -71,7 +71,7 @@ module cpu(clk,reset,in, datapath_out,data_address, V, N, Z, mem_cmd);
             .load_addr(load_addr), 
             .reset_pc(reset_pc), 
             .mem_cmd(mem_cmd) );
- 
+
 
 	//datapath instantiation
 	datapath DP(	.mdata (16'b0),
