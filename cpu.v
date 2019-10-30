@@ -8,7 +8,7 @@ module cpu(clk,reset,in, datapath_out,data_address, V, N, Z, mem_cmd);
 
 	//instantiate PC module
     wire load_pc, reset_pc, load_ir, addr_sel;
-    wire [8:0] next_pc, PC, cpu_out, count;
+    wire [8:0] PC, cpu_out, count;
     
     PC myPC(  .reset_pc(reset_pc), 
             .load_pc(load_pc), 
