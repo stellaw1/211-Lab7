@@ -35,43 +35,6 @@ module regfile(data_in, writenum, write, readnum, clk, data_out);
 endmodule
 
 
-//Source: Lab5 slides 
-//Register with load enable
-//
-// Parameters: 
-// n = width of data
-module vDFFE(clk, en, in, out) ;
-  parameter n = 1; 
-  input clk, en ;
-  input  [n-1:0] in ;
-  output [n-1:0] out ;
-  reg    [n-1:0] out ;
-  wire   [n-1:0] next_out ;
-
-  assign next_out = en ? in : out;
-
-  always @(posedge clk)
-    out = next_out;  
-endmodule
-
-
-//Source: slide set 6
-// n:m decoder
-//
-// Parameters:
-// a - binary input   (n bits wide)
-// b - one hot output (m bits wide)
-module Dec(a, b) ;
-  parameter n=2 ;
-  parameter m=4 ;
-
-  input  [n-1:0] a ;
-  output [m-1:0] b ;
-
-  wire [m-1:0] b = 1 << a ;
-endmodule
-
-
 //to read data from selected register
 module enableRead(readnum, R0, R1, R2, R3, R4, R5, R6, R7, data_out);
     input [2:0] readnum;

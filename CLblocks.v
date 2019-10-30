@@ -10,17 +10,6 @@ module Mux3(a2, a1, a0, s, b);
 endmodule
 
 
-  //MUX that selects which operation to output 
-  Mux_k_4_binary #(16) alu_MUX(not_b,and_val,sub_val,add_val, ALUop, out);
-
-  assign Z = ~(|out); //assign Z = 1 if output is all 0's
-  assign N = out[15];
-  assign V = ~(Ain[15] ^ ~Bin[15]) & (Ain[15] ^ out[15]);
-  //((Ain[15] ^ Bin[15]) & ~( Ain[15] ^ out[15] ));
-
-endmodule
-
-
 //k bit ,4 input, binary select MUX
 module Mux_k_4_binary(a3, a2, a1, a0, sb, b);
   parameter k = 1 ;
@@ -44,4 +33,51 @@ module Mux4(a3, a2, a1, a0, s, b);
 		     ({k{s[1]}} & a1) |
 		     ({k{s[2]}} & a2) |
 		     ({k{s[3]}} & a3) ;
+endmodule
+
+
+//Source: Lab5 slides 
+//Register with load enable
+//
+// Parameters: 
+// n = width of data
+module vDFFE(clk, en, in, out) ;
+  parameter n = 1; 
+  input clk, en ;
+  input  [n-1:0] in ;
+  output [n-1:0] out ;
+  reg    [n-1:0] out ;
+  wire   [n-1:0] next_out ;
+
+  assign next_out = en ? in : out;
+
+  always @(posedge clk)
+    out = next_out;  
+endmodule
+
+
+//Source: slide set 6
+// n:m decoder
+//
+// Parameters:
+// a - binary input   (n bits wide)
+// b - one hot output (m bits wide)
+module Dec(a, b) ;
+  parameter n=2 ;
+  parameter m=4 ;
+
+  input  [n-1:0] a ;
+  output [m-1:0] b ;
+
+  wire [m-1:0] b = 1 << a ;
+endmodule
+
+// equality comparator
+module EqComp(a, b, eq) ;
+  parameter k=8;
+  input  [k-1:0] a,b;
+  output eq;
+  wire   eq;
+
+  assign eq = (a==b) ;
 endmodule

@@ -1,45 +1,55 @@
+//defining state encodings
 `define RST 5'b11111
-`define IF1 5'b11110;
-`define IF2 5'b11101;
+`define IF1 5'b11110
+`define IF2 5'b11101
 `define UPDATE 5'b11100
 `define DECODE 5'b11011
+
 `define MOVim1 5'b00001
 `define MOVim2 5'b00010
 `define MOVim3 5'b00011
 `define MOVim4 5'b00100
+
 `define MOV1 5'b00101
 `define MOV2 5'b00110
 `define MOV3 5'b00111
 `define MOV4 5'b01000
+
 `define ADD1 5'b01001
 `define ADD2 5'b01010
 `define ADD3 5'b01011
 `define ADD4 5'b01100
+
 `define CMP1 5'b01101
 `define CMP2 5'b01110
 `define CMP3 5'b01111
 `define CMP4 5'b10000
+
 `define AND1 5'b10001
 `define AND2 5'b10010
 `define AND3 5'b10011
 `define AND4 5'b10100
+
 `define MVN1 5'b10101
 `define MVN2 5'b10110
 `define MVN3 5'b10111
 `define MVN4 5'b11000
 
-module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel, load_ir, load_pc, addr_sel, reset_pc, mem_cmd);
+//FSM module definition
+module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel, bsel, nsel, load_ir, load_pc, addr_sel, load_addr, reset_pc, mem_cmd);
 
     input reset, clk;
     input [2:0] opcode;
     input [1:0] op;
-    output write, loada, loadb, loadc, loads, asel, bsel, load_ir, load_pc, addr_sel, reset_pc;
+    output write, loada, loadb, loadc, loads, asel, bsel;
+    output load_ir, load_pc, addr_sel, reset_pc, load_addr;
     output [1:0] mem_cmd;
     output [2:0] nsel;
     output [3:0] vsel; 
 
     reg [3:0] vsel;
-    reg write, loada, loadb, loadc, loads, asel, bsel, load_ir, ;
+    reg write, loada, loadb, loadc, loads, asel, bsel, load_ir, load_addr, load_pc, reset_pc, addr_sel;
+    reg [1:0] mem_cmd;
     reg [2:0] nsel;
     reg [4:0] present_state;
 
