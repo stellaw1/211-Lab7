@@ -226,7 +226,7 @@ module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel
             = 21'b_0000_0_0_0_0_0_0_0_000_0_0_0_0_01_0;
             //save this to register Rd
             `LDR5: {vsel,write,loada,loadb,loadc,loads,asel,bsel,nsel,load_ir,load_pc,addr_sel,reset_pc,mem_cmd,load_addr}
-            = 21'b_1000_1_0_0_0_0_0_0_010_0_0_0_0_00_0;
+            = 21'b_1000_1_0_0_0_0_0_0_010_0_0_0_0_01_0;
 
             //STR instruction states
 	    //load value at register Rn to A
