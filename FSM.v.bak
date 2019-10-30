@@ -90,7 +90,7 @@ module FSM(reset, clk, opcode, op, vsel, write, loada, loadb, loadc, loads, asel
                                     5'b011_00: present_state = `LDR1;
                                     5'b100_00: present_state = `STR1;
                                     5'b111_00: present_state = `HALT;
-                                    default: present_state = `IF1;
+                                    default: present_state = `RST;
                                 endcase
             //states of MOVim instr
             {1'b0,`MOVim1}: present_state = `IF1;
